@@ -1,0 +1,724 @@
+%%html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventuras Infantiles Educativas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+        }
+        .bouncy-btn {
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .bouncy-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+        }
+        .bouncy-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+        .card-shadow {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="text-slate-700 flex flex-col min-h-screen">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-rose-100 shadow-sm px-4 py-3">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.goHome()">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 to-rose-400 flex items-center justify-center text-white text-2xl shadow-md">
+                    🌟
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-violet-600 to-rose-500 bg-clip-text text-transparent">Aventuras Mágicas</h1>
+                    <p class="text-xs text-slate-400 font-medium">Aprende jugando (5+ años)</p>
+                </div>
+            </div>
+
+            <div id="stats-header" class="hidden flex items-center space-x-4 bg-slate-50 border border-slate-200/60 px-4 py-1.5 rounded-full shadow-inner">
+                <div class="flex items-center space-x-1">
+                    <span class="text-amber-500 text-lg">⭐</span>
+                    <span id="header-stars" class="font-bold text-slate-700">0</span>
+                </div>
+                <div class="h-4 w-px bg-slate-200"></div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-violet-600" id="header-difficulty">Fácil</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center items-center">
+
+        <!-- 1. HOME SCREEN / SUBJECT SELECTION -->
+        <div id="screen-home" class="w-full space-y-6">
+            <!-- Welcome Banner -->
+            <div class="bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 rounded-3xl p-6 sm:p-10 text-white card-shadow relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
+                <div class="absolute -right-10 -bottom-10 text-9xl opacity-20 select-none pointer-events-none">🚀</div>
+                <div class="z-10 text-center md:text-left mb-6 md:mb-0">
+                    <span class="bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider inline-block mb-3">¡Bienvenido amiguito!</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mb-2">¿Qué aventura jugaremos hoy?</h2>
+                    <p class="text-white/90 text-sm sm:text-base max-w-md">Elige una materia, selecciona qué tan retador lo quieres y acumula estrellas doradas.</p>
+                </div>
+
+                <!-- Difficulty Selector Box -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center z-10 w-full md:w-auto min-w-[240px]">
+                    <p class="text-xs uppercase font-bold tracking-wider mb-2 text-white/80">Dificultad de Retos</p>
+                    <div class="inline-flex rounded-lg bg-black/10 p-1 w-full">
+                        <button onclick="app.setDifficulty('easy')" id="btn-diff-easy" class="flex-1 py-1 px-2.5 text-xs font-bold rounded-md transition-all bg-white text-purple-700 shadow">Fácil</button>
+                        <button onclick="app.setDifficulty('medium')" id="btn-diff-medium" class="flex-1 py-1 px-2.5 text-xs font-bold rounded-md transition-all text-white hover:bg-white/10">Medio</button>
+                        <button onclick="app.setDifficulty('hard')" id="btn-diff-hard" class="flex-1 py-1 px-2.5 text-xs font-bold rounded-md transition-all text-white hover:bg-white/10">Difícil</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Math -->
+                <div onclick="app.startSubject('math')" class="bouncy-btn bg-white rounded-3xl p-6 border-2 border-amber-200 cursor-pointer card-shadow flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-amber-100 text-3xl flex items-center justify-center mb-4 floating">📐</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-1">Matemáticas</h3>
+                    <p class="text-slate-400 text-xs">Sumas, restas y figuras divertidas</p>
+                </div>
+                <!-- English -->
+                <div onclick="app.startSubject('english')" class="bouncy-btn bg-white rounded-3xl p-6 border-2 border-violet-200 cursor-pointer card-shadow flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-violet-100 text-3xl flex items-center justify-center mb-4 floating" style="animation-delay: 0.5s;">🦁</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-1">Inglés</h3>
+                    <p class="text-slate-400 text-xs">Aprende palabras, escucha y escribe</p>
+                </div>
+                <!-- Spanish -->
+                <div onclick="app.startSubject('spanish')" class="bouncy-btn bg-white rounded-3xl p-6 border-2 border-emerald-200 cursor-pointer card-shadow flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-3xl flex items-center justify-center mb-4 floating" style="animation-delay: 1s;">📚</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-1">Español</h3>
+                    <p class="text-slate-400 text-xs">Letras, ortografía y retos de escritura</p>
+                </div>
+                <!-- Ethics -->
+                <div onclick="app.startSubject('ethics')" class="bouncy-btn bg-white rounded-3xl p-6 border-2 border-rose-200 cursor-pointer card-shadow flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-rose-100 text-3xl flex items-center justify-center mb-4 floating" style="animation-delay: 1.5s;">❤️</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-1">Valores y Ética</h3>
+                    <p class="text-slate-400 text-xs">Decisiones buenas y amabilidad</p>
+                </div>
+                <!-- Coding/Robotics Grid -->
+                <div onclick="app.startSubject('coding')" class="bouncy-btn bg-white rounded-3xl p-6 border-2 border-sky-200 cursor-pointer card-shadow flex flex-col items-center text-center sm:col-span-2 lg:col-span-1">
+                    <div class="w-16 h-16 rounded-2xl bg-sky-100 text-3xl flex items-center justify-center mb-4 floating" style="animation-delay: 2s;">🤖</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-1">Robótica y Lógica</h3>
+                    <p class="text-slate-400 text-xs">¡Ayuda al robot a llegar a la meta!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. GAME SCREEN (GENERAL QUESTIONS / AUDIO / KEYBOARD) -->
+        <div id="screen-game" class="hidden w-full max-w-xl bg-white rounded-3xl border border-slate-100 card-shadow p-6 sm:p-8 flex flex-col relative">
+            <button onclick="app.goHome()" class="absolute top-4 right-4 text-slate-300 hover:text-slate-500 text-xl font-bold transition-all">&times; Salir</button>
+            
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-2 text-violet-500 text-xs uppercase font-bold tracking-wider">
+                    <span id="game-badge-emoji">📐</span>
+                    <span id="game-badge-text">Matemáticas</span>
+                </div>
+                <!-- Speak / Audio Assist Indicator -->
+                <div id="audio-assist-container" class="hidden">
+                    <button id="btn-speak" onclick="app.speakCurrentWord()" class="bouncy-btn bg-violet-100 hover:bg-violet-200 text-violet-700 font-bold px-3 py-1.5 rounded-full text-xs flex items-center space-x-1">
+                        <span>🔊 Escuchar de nuevo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Text -->
+            <div class="mb-6">
+                <h2 id="game-question-title" class="text-2xl font-bold text-slate-800 mb-2">¿Cuánto es 2 + 2?</h2>
+                <p id="game-question-subtitle" class="text-slate-400 text-sm">Selecciona la respuesta correcta tocando una opción.</p>
+            </div>
+
+            <!-- Interactive Input Modes -->
+            <div>
+                <!-- Mode A: Option Buttons -->
+                <div id="game-options-container" class="grid grid-cols-1 gap-4 mb-6">
+                    <!-- Options injected dynamically -->
+                </div>
+
+                <!-- Mode B: Keyboard Writing Container -->
+                <div id="game-write-container" class="hidden mb-6 space-y-4">
+                    <input type="text" id="game-text-input" autocomplete="off" placeholder="Escribe tu respuesta aquí..." 
+                           class="w-full text-center text-xl font-bold px-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-violet-500 outline-none transition-all">
+                    <button id="btn-submit-text" onclick="app.checkWrittenAnswer()" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition-all text-sm bouncy-btn">
+                        Enviar respuesta 🚀
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feedback Box -->
+            <div id="game-feedback" class="hidden rounded-2xl p-4 text-center font-bold mb-4 flex items-center justify-center space-x-2"></div>
+
+            <!-- Bottom Navigation -->
+            <div class="flex justify-end">
+                <button id="btn-next-question" onclick="app.nextQuestion()" class="bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all text-sm bouncy-btn flex items-center space-x-2">
+                    <span>Siguiente</span>
+                    <span>➔</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. SPECIAL GAME SCREEN (ROBOTICS GRID) -->
+        <div id="screen-coding" class="hidden w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Grid and Game Board (8 cols) -->
+            <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-100 card-shadow p-6 flex flex-col items-center justify-center relative">
+                <button onclick="app.goHome()" class="absolute top-4 right-4 text-slate-300 hover:text-slate-500 text-xl font-bold transition-all">&times; Salir</button>
+                <h2 class="text-xl font-bold text-slate-800 self-start mb-2">🤖 Programemos al Robot</h2>
+                <p class="text-slate-400 text-xs self-start mb-4">Crea una secuencia de pasos para que el Robot llegue hasta la meta. ¡Cuidado con los muros!</p>
+                
+                <!-- The Grid View -->
+                <div id="robot-grid" class="grid grid-cols-4 gap-2 w-full max-w-[320px] aspect-square bg-slate-100 p-2.5 rounded-2xl border-4 border-slate-200">
+                    <!-- Cells will be dynamic -->
+                </div>
+            </div>
+
+            <!-- Instruction Builder and Controls (5 cols) -->
+            <div class="lg:col-span-5 bg-white rounded-3xl border border-slate-100 card-shadow p-6 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-base font-bold text-slate-800 mb-3">🛠️ Panel de Instrucciones</h3>
+                    
+                    <!-- Buttons to Add Commands -->
+                    <div class="grid grid-cols-3 gap-2 mb-6">
+                        <button onclick="app.addCommand('UP')" class="bouncy-btn bg-sky-50 hover:bg-sky-100 border border-sky-100 rounded-xl py-3 flex flex-col items-center text-xs font-bold text-sky-600">
+                            <span class="text-lg">⬆️</span>
+                            <span>Subir</span>
+                        </button>
+                        <button onclick="app.addCommand('DOWN')" class="bouncy-btn bg-sky-50 hover:bg-sky-100 border border-sky-100 rounded-xl py-3 flex flex-col items-center text-xs font-bold text-sky-600">
+                            <span class="text-lg">⬇️</span>
+                            <span>Bajar</span>
+                        </button>
+                        <button onclick="app.addCommand('LEFT')" class="bouncy-btn bg-sky-50 hover:bg-sky-100 border border-sky-100 rounded-xl py-3 flex flex-col items-center text-xs font-bold text-sky-600">
+                            <span class="text-lg">⬅️</span>
+                            <span>Izquierda</span>
+                        </button>
+                        <button onclick="app.addCommand('RIGHT')" class="bouncy-btn bg-sky-50 hover:bg-sky-100 border border-sky-100 rounded-xl py-3 flex flex-col items-center text-xs font-bold text-sky-600 col-span-3 mt-1">
+                            <span class="text-lg">➡️</span>
+                            <span>Derecha</span>
+                        </button>
+                    </div>
+
+                    <!-- Visualizing Current Queue -->
+                    <div class="mb-4">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Secuencia de comandos:</p>
+                        <div id="command-queue" class="flex flex-wrap gap-2 p-3 bg-slate-50 rounded-xl border border-dashed border-slate-200 min-h-[50px] items-center">
+                            <span class="text-slate-400 text-xs italic">Agrega comandos arriba...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Play and Reset Buttons -->
+                <div class="space-y-3">
+                    <div id="coding-feedback" class="hidden rounded-xl p-3 text-center text-xs font-bold"></div>
+                    <div class="flex space-x-2">
+                        <button onclick="app.clearCommands()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-xs transition-all">
+                            🗑️ Limpiar
+                        </button>
+                        <button onclick="app.runRobot()" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl text-xs transition-all flex items-center justify-center space-x-1 shadow-lg shadow-emerald-500/20">
+                            <span>▶️ Ejecutar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modals and Audio/Visual Confetti -->
+    <footer class="py-4 text-center text-xs text-slate-400/80">
+        Desarrollado con ❤️ para niños geniales • Aventuras Mágicas
+    </footer>
+
+    <!-- Application Logic (Vanilla JavaScript) -->
+    <script>
+        const DATABASE = {
+            math: {
+                easy: [
+                    { q: "¿Cuántos perritos ves aquí? 🐶 🐶 🐶", a: ["2", "3", "4"], ok: "3" },
+                    { q: "¿Cuánto es 2 + 1?", a: ["3", "4", "5"], ok: "3" },
+                    { q: "¿Qué figura tiene forma de pelota? ⚽", a: ["Triángulo", "Cuadrado", "Círculo"], ok: "Círculo" },
+                    { q: "¿Qué número sigue después del 4?", a: ["3", "5", "6"], ok: "5" },
+                    { q: "¿Cuántas fresas ves aquí? 🍓 🍓 🍓 🍓 🍓", a: ["3", "4", "5"], ok: "5" },
+                    { q: "¿De qué color es la manzana de Blancanieves? 🍎", a: ["Verde", "Amarillo", "Roja"], ok: "Roja" },
+                    { q: "¿Cuántos deditos tienes en una mano sin contar el pulgar? 🤚", a: ["4", "5", "3"], ok: "4" },
+                    { q: "Si tienes 1 juguete y te regalan 1 más, ¿cuántos tienes?", a: ["1", "2", "3"], ok: "2" }
+                ],
+                medium: [
+                    { q: "¿Cuánto es 4 + 4?", a: ["7", "8", "9"], ok: "8" },
+                    { q: "Si tienes 3 caramelos 🍬 y te regalan 2 más, ¿cuántos tienes?", a: ["4", "5", "6"], ok: "5" },
+                    { q: "¿Qué figura tiene 4 lados iguales? 🟪", a: ["Triángulo", "Cuadrado", "Círculo"], ok: "Cuadrado" },
+                    { q: "¿Cuánto es 5 - 2?", a: ["2", "3", "4"], ok: "3" },
+                    { q: "Si tienes 6 crayones y pierdes 3, ¿cuántos te quedan?", a: ["2", "3", "4"], ok: "3" },
+                    { q: "¿Qué número es menor que 10 pero mayor que 8?", a: ["7", "8", "9"], ok: "9" },
+                    { q: "¿Cuántas esquinas tiene un triángulo? 🔺", a: ["3", "4", "5"], ok: "3" },
+                    { q: "Si tienes 4 manzanas y regalas 2, ¿cuántas te quedan?", a: ["1", "2", "3"], ok: "2" }
+                ],
+                hard: [
+                    { q: "Si tienes 5 manzanas 🍎 y te comes 2, ¿cuántas te quedan?", a: ["2", "3", "4"], ok: "3" },
+                    { q: "¿Cuánto es 6 + 4?", a: ["8", "9", "10"], ok: "10" },
+                    { q: "¿Qué figura tiene 3 lados iguales? 🔺", a: ["Cuadrado", "Círculo", "Triángulo"], ok: "Triángulo" },
+                    { q: "¿Cuánto es 8 - 3?", a: ["5", "6", "4"], ok: "5" },
+                    { q: "¿Cuánto es 12 - 4?", a: ["7", "8", "9"], ok: "8" },
+                    { q: "Si juntas un grupo de 5 globos y otro de 6, ¿cuántos globos tienes en total?", a: ["10", "11", "12"], ok: "11" },
+                    { q: "¿Qué número sumado con 5 da como resultado 10?", a: ["4", "5", "6"], ok: "5" },
+                    { q: "¿Cuántas caras tiene un cubo de juguete? 🎲", a: ["4", "6", "8"], ok: "6" }
+                ]
+            },
+            english: {
+                easy: [
+                    { q: "¿Cómo se dice 'gato' en inglés? 🐱", a: ["Dog", "Cat", "Bird"], ok: "Cat" },
+                    { q: "¿Qué color es 'Red'? 🔴", a: ["Rojo", "Azul", "Verde"], ok: "Rojo" },
+                    { q: "¿Qué animal es un 'Lion'? 🦁", a: ["Oso", "León", "Elefante"], ok: "León" },
+                    { q: "¿Cómo se saluda en inglés por la mañana?", a: ["Good night", "Good morning", "Goodbye"], ok: "Good morning" },
+                    { q: "¿Cómo se dice 'pez' en inglés? 🐟", a: ["Fish", "Shark", "Frog"], ok: "Fish" },
+                    { q: "¿Cómo se dice 'sol' en inglés? ☀️", a: ["Moon", "Sun", "Star"], ok: "Sun" },
+                    { q: "¿Qué color es 'Green'? 🟢", a: ["Rojo", "Verde", "Azul"], ok: "Verde" }
+                ],
+                medium: [
+                    { q: "¿Cómo se dice 'perro' en inglés? 🐶", a: ["Cat", "Dog", "Rabbit"], ok: "Dog" },
+                    { q: "¿Qué color es 'Blue'? 🔵", a: ["Amarillo", "Rojo", "Azul"], ok: "Azul" },
+                    { q: "¿Cómo se dice 'gracias' en inglés?", a: ["Thank you", "Hello", "Please"], ok: "Thank you" },
+                    { q: "¿Qué número es 'Five'? 5️⃣", a: ["3", "4", "5"], ok: "5" },
+                    { q: "¿Cómo se dice 'agua' en inglés? 💧", a: ["Juice", "Soda", "Water"], ok: "Water" },
+                    { q: "¿Cómo se dice 'leche' en inglés? 🥛", a: ["Milk", "Water", "Coffee"], ok: "Milk" },
+                    // LISTENING CHALLENGE
+                    { q: "Escucha atentamente el audio y escribe la palabra en inglés que escuchas. ¡Significa amarillo! 🟡", type: "listen_write", speakWord: "yellow", ok: "yellow" },
+                    { q: "Escucha el audio y selecciona la palabra en inglés que escuchas: 🥛", type: "listen_select", speakWord: "milk", a: ["water", "milk", "juice"], ok: "milk" }
+                ],
+                hard: [
+                    { q: "¿Cómo se escribe 'manzana' en inglés? 🍎", type: "write", ok: "apple" },
+                    { q: "¿Qué número es 'Eight'? 8️⃣", a: ["Seis (6)", "Siete (7)", "Ocho (8)"], ok: "Ocho (8)" },
+                    { q: "¿Cómo se dice 'por favor' en inglés?", type: "write", ok: "please" },
+                    { q: "¿Qué animal es 'Elephant'? 🐘", a: ["Elefante", "Jirafa", "Ratón"], ok: "Elefante" },
+                    { q: "¿Cómo se escribe 'libro' en inglés? 📖", type: "write", ok: "book" },
+                    { q: "¿Cómo se escribe 'casa' en inglés? 🏠", type: "write", ok: "house" },
+                    // LISTENING / WRITE CHALLENGES
+                    { q: "Escucha el audio y escribe la palabra que oyes. ¡Es el mejor amigo del hombre! 🐶", type: "listen_write", speakWord: "dog", ok: "dog" },
+                    { q: "Escucha el audio y escribe el color que oyes. ¡Es el color del sol! ☀️", type: "listen_write", speakWord: "orange", ok: "orange" }
+                ]
+            },
+            spanish: {
+                easy: [
+                    { q: "¿Con qué letra empieza la palabra 'Avión'? ✈️", a: ["E", "O", "A"], ok: "A" },
+                    { q: "¿Cuál de estas es una vocal?", a: ["M", "U", "P"], ok: "U" },
+                    { q: "¿Cuántas vocales tiene la palabra 'Oso'? 🐻", a: ["Una", "Dos", "Tres"], ok: "Dos" },
+                    { q: "¿Con qué letra empieza 'Sol'? ☀️", a: ["S", "L", "M"], ok: "S" },
+                    { q: "¿Con qué letra empieza 'Uva'? 🍇", a: ["A", "E", "U"], ok: "U" },
+                    { q: "¿Cuál es la vocal de la palabra 'Pez'? 🐟", a: ["A", "E", "O"], ok: "E" },
+                    { q: "¿Con qué vocal empieza 'Iguana'? 🦎", a: ["I", "A", "O"], ok: "I" }
+                ],
+                medium: [
+                    { q: "¿Con qué letra empieza la palabra 'Estrella'? ⭐", a: ["A", "I", "E"], ok: "E" },
+                    { q: "¿Cuántas sílabas tiene la palabra 'Mano'? 🤚", a: ["Una (Ma-no)", "Dos (Ma-no)", "Tres (Ma-no)"], ok: "Dos (Ma-no)" },
+                    { q: "¿Cuál de estos es un animal doméstico?", a: ["Tigre", "Perro", "Tiburón"], ok: "Perro" },
+                    { q: "Escribe la letra que le falta a la palabra 'G_to' para completar el nombre del animal 🐱", type: "write", ok: "a" },
+                    { q: "Escribe la vocal que falta en la palabra: 'P_lo' para que signifique un objeto de madera 🪵", type: "write", ok: "a" },
+                    { q: "¿Cuántas sílabas tiene la palabra 'Pelota'? ⚽", a: ["Dos", "Tres", "Cuatro"], ok: "Tres" },
+                    { q: "Escribe la letra consonante que le falta a la palabra '_opa' para vestirnos: 👕", type: "write", ok: "r" }
+                ],
+                hard: [
+                    { q: "Completa la palabra: 'M_posa' 🦋", a: ["ari", "eli", "oro"], ok: "ari" },
+                    { q: "¿Cuál de estas palabras rima con 'gato'?", a: ["Perro", "Pato", "Sol"], ok: "Pato" },
+                    { q: "Escribe correctamente la palabra para nombrar un vehículo de cuatro ruedas: 🚗", type: "write", ok: "carro" },
+                    { q: "¿Cómo se separan las sílabas de 'casa'? 🏠", a: ["ca - sa", "c - a - s - a", "cas - a"], ok: "ca - sa" },
+                    { q: "Escribe la palabra completa que rime con 'Estrella' y sea una botella pequeña: 🧴", type: "write", ok: "botella" },
+                    { q: "Escribe la palabra contraria de 'Día': 🌙", type: "write", ok: "noche" },
+                    { q: "¿Cuál de estas palabras está escrita correctamente?", a: ["Zanahoria", "Sanahoria", "Canahoria"], ok: "Zanahoria" }
+                ]
+            },
+            ethics: {
+                easy: [
+                    { q: "Si ves a un amiguito triste en la escuela, ¿qué debes hacer? 🤝", a: ["Ignorarlo", "Preguntarle si quiere jugar", "Burlarte"], ok: "Preguntarle si quiere jugar" },
+                    { q: "Cuando queremos pedir un juguete, decimos... 💬", a: ["¡Dámelo ya!", "Por favor", "Llorar fuerte"], ok: "Por favor" },
+                    { q: "¿Cuál de estos es un buen hábito?", a: ["Compartir los juguetes", "Gritar a mamá", "No lavarse las manos"], ok: "Compartir los juguetes" },
+                    { q: "¿Qué hacemos si tiramos basura por accidente? 🗑️", a: ["La dejamos ahí", "La recogemos y ponemos en el bote", "La escondemos"], ok: "La recogemos y ponemos en el bote" },
+                    { q: "¿Cómo saludamos al llegar a un lugar?", a: ["Sin decir nada", "Gritando", "Diciendo Buenos días o Hola"], ok: "Diciendo Buenos días o Hola" }
+                ],
+                medium: [
+                    { q: "Si un amigo te comparte sus colores, ¿qué le dices?", a: ["Nada", "Gracias", "Quiero más"], ok: "Gracias" },
+                    { q: "¿Qué debes hacer antes de comer? 🧼", a: ["Jugar en la tierra", "Lavarte las manos", "Dormir"], ok: "Lavarte las manos" },
+                    { q: "¿Cómo ayudamos a mantener limpia la escuela?", a: ["Tirando papeles", "No haciendo nada", "Poniendo la basura en su lugar"], ok: "Poniendo la basura en su lugar" },
+                    { q: "Si alguien está hablando en clase, nosotros... 🤫", a: ["Gritamos", "Escuchamos con atención", "Hacemos ruido"], ok: "Escuchamos con atención" },
+                    { q: "Si ves que a un profesor se le caen unos papeles al suelo, ¿qué haces?", a: ["Pasar de largo", "Ayudarle a recogerlos", "Reírte"], ok: "Ayudarle a recogerlos" }
+                ],
+                hard: [
+                    { q: "Si te prestan un juguete y se rompe sin querer, ¿qué haces?", a: ["Lo escondes", "Dices la verdad y pides disculpas", "Le echas la culpa a otro"], ok: "Dices la verdad y pides disculpas" },
+                    { q: "¿Qué significa ser empático? 💖", a: ["Pensar y sentir cómo se siente el otro", "Ganar todos los juegos", "Enojarte rápido"], ok: "Pensar y sentir cómo se siente el otro" },
+                    { q: "Ayudar en los deberes del hogar es...", a: ["Aburrido y malo", "Una excelente forma de cooperar en familia", "Solo tarea de los adultos"], ok: "Una excelente forma de cooperar en familia" },
+                    { q: "Cuidar las plantas y a los animales es importante porque...", a: ["Son seres vivos y protegen nuestro planeta", "Dan dinero", "Podemos jugar rudo con ellos"], ok: "Son seres vivos y protegen nuestro planeta" },
+                    { q: "Si un compañero de juego comete un error en el juego y pierden, ¿qué debes hacer?", a: ["Gritarle e insultarle", "Apoyarlo y decirle que lo harán mejor la próxima vez", "No volver a jugar con él"], ok: "Apoyarlo y decirle que lo harán mejor la próxima vez" }
+                ]
+            }
+        };
+
+        class AdventureApp {
+            constructor() {
+                this.stars = 0;
+                this.difficulty = 'easy';
+                this.currentSubject = null;
+                this.questions = [];
+                this.currentQuestionIdx = 0;
+                this.selectedAnswer = null;
+
+                // Robot grid states
+                this.robotPos = { x: 0, y: 3 }; // Bottom-left corner (0-indexed)
+                this.goalPos = { x: 3, y: 0 };  // Top-right corner
+                this.walls = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 1, y: 2 }];
+                this.commands = [];
+                this.isPlayingRobot = false;
+            }
+
+            init() {
+                this.updateHeader();
+                this.goHome();
+            }
+
+            setDifficulty(diff) {
+                this.difficulty = diff;
+                document.getElementById('btn-diff-easy').className = diff === 'easy' ? 'flex-1 py-1 px-2.5 text-xs font-bold rounded-md transition-all bg-white text-purple-700 shadow' : 'flex-1 py-1 px-2.5 text-xs font-bold rounded-md transition-all text-white hover:bg-white/10';
+                document.getElementById('btn-diff-medium').className = diff === 'medium' ? 'flex-1 py-1 px-2.5 text-xs font-bold rounded-md transition-all bg-white text-purple-700 shadow' : 'flex-1 py-1 px-2.5 text-xs font-bold rounded-md transition-all text-white hover:bg-white/10';
+                document.getElementById('btn-diff-hard').className = diff === 'hard' ? 'flex-1 py-1 px-2.5 text-xs font-bold rounded-md transition-all bg-white text-purple-700 shadow' : 'flex-1 py-1 px-2.5 text-xs font-bold rounded-md transition-all text-white hover:bg-white/10';
+                this.updateHeader();
+            }
+
+            updateHeader() {
+                document.getElementById('header-stars').textContent = this.stars;
+                
+                let diffText = 'Fácil';
+                if (this.difficulty === 'medium') diffText = 'Medio';
+                else if (this.difficulty === 'hard') diffText = 'Difícil';
+                
+                document.getElementById('header-difficulty').textContent = diffText;
+            }
+
+            goHome() {
+                document.getElementById('screen-home').classList.remove('hidden');
+                document.getElementById('screen-game').classList.add('hidden');
+                document.getElementById('screen-coding').classList.add('hidden');
+                document.getElementById('stats-header').classList.add('hidden');
+                this.currentSubject = null;
+            }
+
+            // Fisher-Yates shuffle helper
+            shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            startSubject(subject) {
+                document.getElementById('stats-header').classList.remove('hidden');
+                if (subject === 'coding') {
+                    this.startCodingGame();
+                } else {
+                    this.currentSubject = subject;
+                    // Clone questions array and shuffle it!
+                    let originalQuestions = DATABASE[subject][this.difficulty];
+                    this.questions = this.shuffleArray([...originalQuestions]);
+                    this.currentQuestionIdx = 0;
+                    this.showQuestion();
+                }
+            }
+
+            showQuestion() {
+                const qData = this.questions[this.currentQuestionIdx];
+                this.selectedAnswer = null;
+                
+                // Reset feedback
+                document.getElementById('game-feedback').classList.add('hidden');
+                document.getElementById('btn-next-question').classList.add('hidden');
+                
+                // Setup badge
+                const badgeText = {
+                    math: "Matemáticas 📐",
+                    english: "Inglés 🦁",
+                    spanish: "Español 📚",
+                    ethics: "Valores ❤️"
+                }[this.currentSubject];
+                
+                document.getElementById('game-badge-emoji').textContent = badgeText.split(" ")[1] || "🌟";
+                document.getElementById('game-badge-text').textContent = badgeText.split(" ")[0];
+                document.getElementById('game-question-title').textContent = qData.q;
+                
+                // Listening / Web Speech Integration
+                const audioContainer = document.getElementById('audio-assist-container');
+                if (qData.type && qData.type.includes('listen')) {
+                    audioContainer.classList.remove('hidden');
+                    this.speakCurrentWord();
+                } else {
+                    audioContainer.classList.add('hidden');
+                }
+
+                // Input Selection layout modes:
+                const optionsBox = document.getElementById('game-options-container');
+                const writeBox = document.getElementById('game-write-container');
+                const inputField = document.getElementById('game-text-input');
+                
+                inputField.value = ''; // Reset writing
+
+                if (qData.type === 'write' || qData.type === 'listen_write') {
+                    // Keyboard Write Mode
+                    optionsBox.classList.add('hidden');
+                    writeBox.classList.remove('hidden');
+                    document.getElementById('game-question-subtitle').textContent = "Escribe la palabra con tu teclado físico y presiona enviar.";
+                } else {
+                    // Multiple Choice Mode
+                    optionsBox.classList.remove('hidden');
+                    writeBox.classList.add('hidden');
+                    document.getElementById('game-question-subtitle').textContent = "Selecciona la respuesta correcta tocando una opción.";
+                    
+                    // Clear and inject options
+                    optionsBox.innerHTML = '';
+                    qData.a.forEach(option => {
+                        const btn = document.createElement('button');
+                        btn.className = "w-full border-2 border-slate-100 hover:border-violet-300 rounded-2xl p-4 text-left font-semibold text-slate-700 hover:bg-violet-50/50 transition-all flex items-center justify-between bouncy-btn group";
+                        btn.innerHTML = `<span>${option}</span><span class='opacity-0 group-hover:opacity-100 transition-opacity text-violet-400'>👉</span>`;
+                        btn.onclick = () => this.checkAnswer(option, btn);
+                        optionsBox.appendChild(btn);
+                    });
+                }
+                
+                // Switch screen
+                document.getElementById('screen-home').classList.add('hidden');
+                document.getElementById('screen-game').classList.remove('hidden');
+            }
+
+            speakCurrentWord() {
+                const qData = this.questions[this.currentQuestionIdx];
+                if (qData && qData.speakWord && 'speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(qData.speakWord);
+                    utterance.lang = 'en-US'; // Use native English for listening challenges
+                    utterance.rate = 0.8;    // Slightly slower for children
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+
+            checkAnswer(selected, element) {
+                if (this.selectedAnswer !== null) return; // Prevent multiple selection
+                this.selectedAnswer = selected;
+                const qData = this.questions[this.currentQuestionIdx];
+                
+                const feedbackBox = document.getElementById('game-feedback');
+                feedbackBox.classList.remove('hidden');
+                
+                if (selected === qData.ok) {
+                    element.classList.remove('border-slate-100', 'hover:border-violet-300');
+                    element.classList.add('border-emerald-500', 'bg-emerald-50');
+                    feedbackBox.className = "rounded-2xl p-4 text-center font-bold mb-4 flex items-center justify-center space-x-2 bg-emerald-100 text-emerald-800";
+                    feedbackBox.innerHTML = "<span>🎉 ¡Excelente trabajo! ¡Es correcto! +1 Estrellita ⭐</span>";
+                    this.stars += 1;
+                    this.updateHeader();
+                } else {
+                    element.classList.remove('border-slate-100', 'hover:border-violet-300');
+                    element.classList.add('border-rose-400', 'bg-rose-50');
+                    feedbackBox.className = "rounded-2xl p-4 text-center font-bold mb-4 flex items-center justify-center space-x-2 bg-rose-100 text-rose-800";
+                    feedbackBox.innerHTML = `<span>💡 ¡Casi! La respuesta era: ${qData.ok}</span>`;
+                }
+                
+                document.getElementById('btn-next-question').classList.remove('hidden');
+            }
+
+            checkWrittenAnswer() {
+                if (this.selectedAnswer !== null) return;
+                
+                const inputField = document.getElementById('game-text-input');
+                const writtenValue = inputField.value.trim().toLowerCase();
+                const qData = this.questions[this.currentQuestionIdx];
+                
+                if (!writtenValue) {
+                    alert("¡Por favor escribe una palabra primero!");
+                    return;
+                }
+                
+                this.selectedAnswer = writtenValue;
+                const feedbackBox = document.getElementById('game-feedback');
+                feedbackBox.classList.remove('hidden');
+                
+                const expectedValue = qData.ok.trim().toLowerCase();
+                
+                if (writtenValue === expectedValue) {
+                    feedbackBox.className = "rounded-2xl p-4 text-center font-bold mb-4 flex items-center justify-center space-x-2 bg-emerald-100 text-emerald-800";
+                    feedbackBox.innerHTML = "<span>🎉 ¡Excelente ortografía! ¡Es correcto! +1 Estrellita ⭐</span>";
+                    this.stars += 1;
+                    this.updateHeader();
+                } else {
+                    feedbackBox.className = "rounded-2xl p-4 text-center font-bold mb-4 flex items-center justify-center space-x-2 bg-rose-100 text-rose-800";
+                    feedbackBox.innerHTML = `<span>💡 ¡Casi! La palabra correcta es: <strong>${qData.ok}</strong></span>`;
+                }
+                
+                document.getElementById('btn-next-question').classList.remove('hidden');
+            }
+
+            nextQuestion() {
+                this.currentQuestionIdx++;
+                if (this.currentQuestionIdx < this.questions.length) {
+                    this.showQuestion();
+                } else {
+                    // Complete challenge
+                    alert(`🌟 ¡Increíble! Has terminado esta aventura. Tienes un total de ${this.stars} estrellas.`);
+                    this.goHome();
+                }
+            }
+
+            /* ROBOTICS LOGIC */
+            startCodingGame() {
+                document.getElementById('screen-home').classList.add('hidden');
+                document.getElementById('screen-coding').classList.remove('hidden');
+                this.robotPos = { x: 0, y: 3 }; 
+                this.commands = [];
+                this.renderGrid();
+                this.renderQueue();
+                const feed = document.getElementById('coding-feedback');
+                feed.classList.add('hidden');
+            }
+
+            renderGrid() {
+                const grid = document.getElementById('robot-grid');
+                grid.innerHTML = '';
+                for (let y = 0; y < 4; y++) {
+                    for (let x = 0; x < 4; x++) {
+                        const cell = document.createElement('div');
+                        cell.className = "bg-white rounded-xl flex items-center justify-center text-xl font-bold shadow-sm relative border border-slate-200/50";
+                        
+                        // Is wall?
+                        const isWall = this.walls.some(w => w.x === x && w.y === y);
+                        if (isWall) {
+                            cell.className += " bg-slate-400 text-white";
+                            cell.textContent = "🧱";
+                        } 
+                        // Is Goal?
+                        else if (this.goalPos.x === x && this.goalPos.y === y) {
+                            cell.className += " bg-amber-50 border-2 border-dashed border-amber-300";
+                            cell.textContent = "🏁";
+                        }
+                        // Is Robot?
+                        if (this.robotPos.x === x && this.robotPos.y === y) {
+                            cell.textContent = "🤖";
+                            cell.className += " scale-110 floating";
+                        }
+                        
+                        grid.appendChild(cell);
+                    }
+                }
+            }
+
+            addCommand(direction) {
+                if (this.commands.length >= 8) {
+                    alert("¡Tu memoria de comandos está llena! Ejecuta o borra para agregar más.");
+                    return;
+                }
+                this.commands.push(direction);
+                this.renderQueue();
+            }
+
+            clearCommands() {
+                this.commands = [];
+                this.renderQueue();
+                this.robotPos = { x: 0, y: 3 };
+                this.renderGrid();
+                const feed = document.getElementById('coding-feedback');
+                feed.classList.add('hidden');
+            }
+
+            renderQueue() {
+                const queueBox = document.getElementById('command-queue');
+                if (this.commands.length === 0) {
+                    queueBox.innerHTML = `<span class="text-slate-400 text-xs italic">Agrega comandos arriba...</span>`;
+                    return;
+                }
+                queueBox.innerHTML = '';
+                this.commands.forEach((cmd, idx) => {
+                    const badge = document.createElement('span');
+                    const emoji = { UP: '⬆️', DOWN: '⬇️', LEFT: '⬅️', RIGHT: '➡️' }[cmd];
+                    badge.className = "bg-violet-100 text-violet-700 text-xs px-2.5 py-1 rounded-lg border border-violet-200 font-bold flex items-center space-x-1";
+                    badge.innerHTML = `<span>${emoji}</span>`;
+                    queueBox.appendChild(badge);
+                });
+            }
+
+            async runRobot() {
+                if (this.commands.length === 0) {
+                    alert("Por favor, agrega comandos primero.");
+                    return;
+                }
+                
+                const feed = document.getElementById('coding-feedback');
+                feed.className = "rounded-xl p-3 text-center text-xs font-bold bg-amber-100 text-amber-800";
+                feed.textContent = "🤖 Ejecutando secuencia...";
+                feed.classList.remove('hidden');
+                
+                // Reset position to begin execution
+                this.robotPos = { x: 0, y: 3 };
+                this.renderGrid();
+
+                for (let i = 0; i < this.commands.length; i++) {
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                    const cmd = this.commands[i];
+                    let nextPos = { ...this.robotPos };
+                    
+                    if (cmd === 'UP') nextPos.y--;
+                    else if (cmd === 'DOWN') nextPos.y++;
+                    else if (cmd === 'LEFT') nextPos.x--;
+                    else if (cmd === 'RIGHT') nextPos.x++;
+                    
+                    // Out of bounds check
+                    if (nextPos.x < 0 || nextPos.x > 3 || nextPos.y < 0 || nextPos.y > 3) {
+                        feed.className = "rounded-xl p-3 text-center text-xs font-bold bg-rose-100 text-rose-800";
+                        feed.textContent = "💥 ¡Oh no! El robot intentó salir del laberinto.";
+                        return;
+                    }
+                    
+                    // Collision check
+                    const hitsWall = this.walls.some(w => w.x === nextPos.x && w.y === nextPos.y);
+                    if (hitsWall) {
+                        feed.className = "rounded-xl p-3 text-center text-xs font-bold bg-rose-100 text-rose-800";
+                        feed.textContent = "💥 ¡Choque! Chocaste contra una pared 🧱";
+                        return;
+                    }
+                    
+                    this.robotPos = nextPos;
+                    this.renderGrid();
+                }
+                
+                // Final check
+                if (this.robotPos.x === this.goalPos.x && this.robotPos.y === this.goalPos.y) {
+                    feed.className = "rounded-xl p-3 text-center text-xs font-bold bg-emerald-100 text-emerald-800";
+                    feed.textContent = "🎉 ¡Felicidades! Lograste programar al robot hasta la meta. +3 Estrellas ⭐";
+                    this.stars += 3;
+                    this.updateHeader();
+                } else {
+                    feed.className = "rounded-xl p-3 text-center text-xs font-bold bg-slate-100 text-slate-700";
+                    feed.textContent = "🏁 El robot se detuvo antes de llegar a la meta. ¡Intenta otra secuencia!";
+                }
+            }
+        }
+
+        // Instance and initialize
+        const app = new AdventureApp();
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+        // Safe initial call just in case DOM loaded already
+        setTimeout(() => {
+            app.init();
+        }, 100);
+    </script>
+</body>
+</html>
